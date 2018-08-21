@@ -1,0 +1,323 @@
+
+
+select q1.recipient, q1.sum, q1.c 
+from 
+    (select recipient, count(*) as c, sum(amount) as sum
+     from transfers group by recipient) as q
+where 
+    c <= 3 AND sum <= 1024
+
+
+
+select recipient, c from 
+(
+  select recipient, sum(amount) as sum, count(*) as c from transfers group by recipient
+  
+  having count(*) <= 3 ) tf
+  where sum >= 1024 order by recipient
+
+
+Select recipient
+From (select transfers.*, row_number() over (partition by recipient order by amount desc) as seqnum
+      From transfers
+     ) tf
+Where seqnum <= 3
+Group by recipient
+Having sum(amount) > 1024
+
+
+
+select recipient from 
+(
+  select name, sum(amount) as sum, count(*) from transfers group by name 
+  having count(*) <= 3) transfers
+where sum >= 1024
+
+
+-- write your code in PostgreSQL 9.4
+SELECT q.recipient, q.sum, q.c
+from (select recipient, count(*) as c, sum(amount) as sum from transfers group by recipient) as q
+where c<=3 and sum >= 1024
+
+
+function solution (T) {
+    var len = 1;
+    var winterHigh = T[0];
+    var overallHigh = T[0];
+
+    T.forEach(function (temp, index) {
+        if (temp <= winterHigh) {
+            len = index + 1;
+            winterHigh = overallHigh;
+        } else if (temp > overallHigh) {
+            overallHigh = temp;
+        }
+    });
+
+    return len;
+}
+
+// helper function, calculate factorial number of n
+long factorial(int n) {
+
+    long result = 1;
+    for (int i = 2; i <= n; ++i) {
+        result *= i;
+    }
+
+    return result;
+}
+
+long factorial(int n);
+
+// ind total number of possible permutations with given digits
+int permutationsCount(int len, char* charMap) {
+
+    long num_permutations = factorial(len);
+    long denominator = 1;
+    int numLen = MAX_DIGITS;
+
+    for(int i=0; i<numLen; ++i)
+    {
+        if(charMap[i] > 1)
+        {
+            denominator *= factorial(charMap[i]);
+        }
+    }
+
+    long count = num_permutations / denominator;
+    return (int)count;
+}
+
+
+
+    if (n <= 10) {
+        return 1;
+    }
+
+    string num;
+    stringstream ss;
+    ss << n;
+    num = ss.str();
+
+
+
+    char* charMap = new char[MAX_DIGITS];
+    memset(charMap, 0, sizeof(char)* MAX_DIGITS);
+
+    int len = num.length();
+
+
+    // map the frequency of each digit
+    for(int i=0; i<lenen; ++i)
+    {
+        charMap[num[i] - '0']++;
+    }
+
+    int count = permutationsCount(lenen, charMap);
+
+    // all the permutation starting with 0 not count
+
+    if (charMap[0] != 0) {
+
+        charMap[0]--;
+        count = count - permutationsCount(numLen - 1, charMap);
+    }
+
+    return count;
+
+
+
+
+
+
+#include <iostream>
+#include <sstream>
+#include <string.h>
+#include <assert.h>
+#include <string>
+
+#define MAX_DIGITS 10
+
+using namespace std;
+
+/*
+Two non-negative numbers N and M are called similar if their decimal representations (without leading zeros)
+can be obtained from each other by rearranging the digits. For example, in each of the following pairs one integer
+is similar to the other.
+    123 and 321
+    52832 and 22835
+    12 and 21
+Write a function such that given a non-negative integer N returns the number of non-negative integers similar to N.
+For example, given N=1213 the function should return 12 because there are twelve integers similar to 1213 namely:
+1123, 1132, 1213, 1231, 1312, 1321, 2113, 2131, 2311, 3112, 3121 and 3211.
+*/
+
+
+
+
+long factorial(int n);
+
+// Method to find total number of permutation possible with given digits
+int countHelper(int length, char* charMap) {
+
+    long numerator = factorial(length);
+    long denominator = 1;
+    int numLen = MAX_DIGITS;
+
+    for(int i=0; i<numLen; ++i)
+    {
+        if(charMap[i] > 1)
+        {
+            denominator *= factorial(charMap[i]);
+        }
+    }
+
+    long count = numerator / denominator;
+    return (int) count;
+}
+
+// Method to evaluate factorial of number n
+long factorial(int n) {
+
+    long result = 1;
+    for (int i = 2; i <= n; ++i) {
+        result *= i;
+    }
+
+    return result;
+}
+
+int solution(int n) {
+
+    if (n <= 10) {
+        return 1;
+    }
+
+    string num;
+    stringstream ss;
+    ss << n;
+    num = ss.str();
+
+    //cout << num << endl;
+
+    char* charMap = new char[MAX_DIGITS];
+    memset(charMap, 0, sizeof(char)* MAX_DIGITS);
+
+    int numLen = num.length();
+    //cout << "Hi " <<  numLen << endl;
+
+    // Count the frequency of each digits
+    for(int i=0; i<numLen; ++i)
+    {
+        charMap[num[i] - '0']++;
+    }
+
+    int count = countHelper(numLen, charMap);
+
+    // If there are zero's in the number then all the permutation starting
+    // with 0 will be invalid as they will be of length < numLen.
+    // So we need to subtract those numbers from total found so far
+    if (charMap[0] != 0) {
+
+        charMap[0]--;
+        count = count - countHelper(numLen - 1, charMap);
+    }
+
+    return count;
+}
+
+int main()
+{
+    assert(1 == solution(1000));
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function wintermax (T) {
+    var len_winter = 1;
+    var winterMax = T[0];
+    var currentMax = T[0];
+
+    T.forEach(function (tmp, i) {
+        if (tmp <= winterMax) {
+            len_winter = i + 1;
+            winterMax= currentMax;
+        } else if (tmp > currentMax) {
+            currentMax = tmp;
+        }
+    });
+
+    return len_winter;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select * from (
+select name, 
+sum(amount) as total, 
+count(*) as rec_count
+from transfers 
+group by name 
+having count(*) <= 3) tbl
+where total >= 1024
+
+
+select distinct a.sender,a.total_sum from(
+ SELECT t1.sender,(t1.value+ t2.value + t3.value)
+       as total_sum
+    FROM    
+    transfers2  t1, transfers2 t2, transfers2 t3
+          where 
+              t1.sender = t2.sender
+           and t3.sender = t2.sender
+             and t1.date!=t2.date 
+             and t1.date!=t3.date
+             and t2.date!=t3.date
+             ) a
+             where a.total_sum>500
+
+
